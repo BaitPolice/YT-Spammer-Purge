@@ -1433,7 +1433,7 @@ def main():
         # Report, Warn, & None    
         if current.errorOccurred == False:
           print(f" > To {F.LIGHTCYAN_EX}report the comments for spam{S.R}, type '{F.LIGHTCYAN_EX}REPORT{S.R}'.")
-	  print(f" > To {F.LIGHTCYAN_EX}send a comment warning others to not fall for the bait{S.R}, type '{F.LIGHTCYAN_EX}WARN{S.R}'.")
+	  print(f" > To {F.LIGHTCYAN_EX}post a comment warning others to not fall for the bait{S.R}, type '{F.LIGHTCYAN_EX}WARN{S.R}'.")
         if loggingEnabled:
           print(f" > To do nothing and {F.YELLOW}only log{S.R}, type '{F.YELLOW}NONE{S.R}'")
         else:
@@ -1515,9 +1515,11 @@ def main():
         deletionModeFriendlyName = "Moved to 'Held for Review' Section"
       elif deletionMode == "reportSpam":
         deletionModeFriendlyName = "Reported for spam"
+      elif deletionMode == "warn":
+	deletionModeFriendlyName = "Posted warning comment"
 
       # Set or choose ban mode, check if valid based on deletion mode
-      if (deletionMode == "rejected" or deletionMode == "reportSpam" or deletionMode == "heldForReview") and deletionEnabled == True and current.errorOccurred == False:
+      if (deletionMode == "rejected" or deletionMode == "reportSpam" or deletionMode == "heldForReview" or deletionMode == "warn") and deletionEnabled == True and current.errorOccurred == False:
         proceedWithDeletion = True
         if config['enable_ban'] != "ask":
           if config['enable_ban'] == False:
