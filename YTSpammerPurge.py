@@ -1457,6 +1457,10 @@ def main():
         elif confirmDelete.lower() == "report":
           deletionEnabled = True
           deletionMode = "reportSpam" 
+		
+	elif confirmDelete.lower() == "warn":
+          deletionEnabled = True
+          deletionMode = "warn"
 
         elif "exclude" in confirmDelete.lower() or "only" in confirmDelete.lower():
           if "exclude" in confirmDelete.lower():
