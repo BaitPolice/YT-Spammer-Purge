@@ -1,1 +1,1 @@
-nothing
+install.sh is broken
