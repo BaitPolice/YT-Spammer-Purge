@@ -1058,13 +1058,13 @@ def delete_found_comments(commentsList, banChoice, deletionMode, recoveryMode=Fa
         print("\nSomething may gone wrong when reporting the comments.")
         failedComments += commentIDs
     elif deletionMode == "warn":
-      text = """👮‍♂✋ Stop right there!
-Please ignore the reply above, it is bait and the user wants to get attention.
-Don't fall for the trap! Move along, and stay aware for other baiters in the reply/comment section
+      text = """👮✋ *Stop right there!*
+Please ignore the reply above, it is bait and the user wants to get replied for attention.
+Have a good day, and stay aware from other baiters in the reply/comment section.
 
-(Insert more info here)"""
+If you still don't want to see bait comments anymore, you can just report it as spam."""
       for commentID in commentIDs:
-        response = auth.YOUTUBE.comments().insert(body={"snippet": {"textOriginal": text, "parentId": commentID}}).execute()
+        response = auth.YOUTUBE.comments().insert(part="snippet", body={"snippet": {"textOriginal": text, "parentId": commentID}}).execute()
     elif deletionMode == "heldForReview" or deletionMode == "rejected" or deletionMode == "published":
       try:
         response = auth.YOUTUBE.comments().setModerationStatus(id=commentIDs, moderationStatus=deletionMode, banAuthor=banChoice).execute()
