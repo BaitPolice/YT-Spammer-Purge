@@ -1397,7 +1397,7 @@ def main():
     # If not skipped by config, ask user what to do
     if confirmDelete == None and returnToMenu == False:
       # Menu for deletion mode
-      validResponses = ['delete', 'report', 'hold', 'none']
+      validResponses = ['delete', 'report', 'hold', 'none', 'warn']
       while confirmDelete == None or confirmDelete.lower() not in validResponses:
         # Title
         if current.errorOccurred == True:
@@ -1407,7 +1407,7 @@ def main():
         elif exclude == True:
           print(f"{F.YELLOW}How do you want to handle the rest of the comments (not ones you {F.LIGHTGREEN_EX}excluded{F.YELLOW})?{S.R}")
         if userNotChannelOwner == True and moderator_mode == False:
-          print(f"{F.GREEN}~~ Not Your Channel Mode: Only Reporting is Possible ~~{S.R}")
+          print(f"{F.GREEN}~~ Not Your Channel Mode: Only Reporting and Warning is Possible ~~{S.R}")
         if userNotChannelOwner == True and moderator_mode == True:
           print(f"{F.GREEN}~~ Moderator Mode: Reporting and Holding for Review is possible ~~{S.R}")
 
@@ -1430,9 +1430,10 @@ def main():
           if (userNotChannelOwner == False or moderator_mode == True) and current.errorOccurred == False:
             print(f" > To {F.LIGHTRED_EX}move rest of comments above to 'Held For Review' in YT Studio{S.R}: Type '{F.LIGHTRED_EX}HOLD{S.R}', then hit Enter.")
 
-        # Report & None    
+        # Report, Warn, & None    
         if current.errorOccurred == False:
           print(f" > To {F.LIGHTCYAN_EX}report the comments for spam{S.R}, type '{F.LIGHTCYAN_EX}REPORT{S.R}'.")
+	  print(f" > To {F.LIGHTCYAN_EX}send a comment warning others to not fall for the bait{S.R}, type '{F.LIGHTCYAN_EX}WARN{S.R}'.")
         if loggingEnabled:
           print(f" > To do nothing and {F.YELLOW}only log{S.R}, type '{F.YELLOW}NONE{S.R}'")
         else:
