@@ -1043,8 +1043,8 @@ def delete_found_comments(commentsList, banChoice, deletionMode, recoveryMode=Fa
     actionPresent = "Reporting"
     actionPast = "Reported"
   elif deletionMode == "warn":
-    actionPresent = "Commenting"
-    actionPast = "Done"
+    actionPresent = "Posting"
+    actionPast = "Posted"
   else:
     actionPresent = "Processing"
     actionPast = "Processed"
@@ -1064,7 +1064,17 @@ Have a good day, and stay aware from other baiters in the reply/comment section.
 
 If you still don't want to see bait comments anymore, you can just report it as spam."""
       for commentID in commentIDs:
-        response = auth.YOUTUBE.comments().insert(part="snippet", body={"snippet": {"textOriginal": text, "parentId": commentID}}).execute()
+        comment = auth.YOUTUBE.comments().list(part="snippet", parentId=commentID)
+        try:
+          comment.parentId
+        except AttributeError:
+          reply = False
+        else:
+          reply = True
+        if reply:
+          auth.YOUTUBE.comments().insert(part="snippet", body={"snippet": {"textOriginal": text, "parentId": comment.parentId}}).execute()
+        else:
+          auth.YOUTUBE.comments().insert(part="snippet", body={"snippet": {"textOriginal": text, "parentId": commentID}}).execute()
     elif deletionMode == "heldForReview" or deletionMode == "rejected" or deletionMode == "published":
       try:
         response = auth.YOUTUBE.comments().setModerationStatus(id=commentIDs, moderationStatus=deletionMode, banAuthor=banChoice).execute()
