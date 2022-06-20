@@ -1071,7 +1071,16 @@ If you still don't want to see bait comments anymore, you can just report it as 
           reply = False
         else:
           reply = True
+
         if reply:
+          repliesResult = auth.YOUTUBE.comments().list(part="snippet", parentId=comment.parentId, maxResults=100)
+          parentReplies = repliesResult.items
+          while repliesResult.nextPageToken:
+            repliesResult = auth.YOUTUBE.comments().list(part="snippet", parentId=comment.parentId, pageToken=repliesResult.nextPageToken)
+            parentReplies.append(repliesResult.items)
+          for item in parentReplies:
+            if "Please ignore the reply above, it is bait and the user wants to get replied for attention." in item.snippet.textOriginal:
+              continue
           auth.YOUTUBE.comments().insert(part="snippet", body={"snippet": {"textOriginal": text, "parentId": comment.parentId}}).execute()
         else:
           auth.YOUTUBE.comments().insert(part="snippet", body={"snippet": {"textOriginal": text, "parentId": commentID}}).execute()
