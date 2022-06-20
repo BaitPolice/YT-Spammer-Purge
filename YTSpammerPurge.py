@@ -555,6 +555,7 @@ def main():
           
           if CURRENTUSER.id != videosToScan[0]['channelOwnerID']:
             # userNotChannelOwner = True
+            pass
 
           miscData.channelOwnerID = videosToScan[0]['channelOwnerID']
           miscData.channelOwnerName = videosToScan[0]['channelOwnerName']
