@@ -1064,24 +1064,24 @@ Have a good day, and stay aware from other baiters in the reply/comment section.
 
 If you still don't want to see bait comments anymore, you can just report it as spam."""
       for commentID in commentIDs:
-        comment = auth.YOUTUBE.comments().list(part="snippet", parentId=commentID)
+        comment = auth.YOUTUBE.comments().list(part="snippet", id=commentID).execute()
+        comment = comment["items"][0]
         try:
-          comment.parentId
-        except AttributeError:
+          comment["snippet"]["parentId"]
+        except KeyError:
           reply = False
         else:
           reply = True
 
         if reply:
-          repliesResult = auth.YOUTUBE.comments().list(part="snippet", parentId=comment.parentId, maxResults=100)
-          parentReplies = repliesResult.items
-          while repliesResult.nextPageToken:
-            repliesResult = auth.YOUTUBE.comments().list(part="snippet", parentId=comment.parentId, pageToken=repliesResult.nextPageToken)
-            parentReplies.append(repliesResult.items)
-          for item in parentReplies:
-            if "Please ignore the reply above, it is bait and the user wants to get replied for attention." in item.snippet.textOriginal:
-              continue
-          auth.YOUTUBE.comments().insert(part="snippet", body={"snippet": {"textOriginal": text, "parentId": comment.parentId}}).execute()
+          repliesResult = auth.YOUTUBE.comments().list(part="snippet", parentId=comment["snippet"]["parentId"], maxResults=100).execute()
+          parentReplies = repliesResult["items"]
+          while repliesResult.get("nextPageToken"):
+            repliesResult = auth.YOUTUBE.comments().list(part="snippet", parentId=comment["snippet"]["parentId"], pageToken=repliesResult["nextPageToken"]).execute()
+            parentReplies.append(repliesResult["items"])
+          if "Please ignore the reply above, it is bait and the user wants to get replied for attention." in [k["snippet"]["textOriginal"] for k in parentReplies]:
+            continue
+          auth.YOUTUBE.comments().insert(part="snippet", body={"snippet": {"textOriginal": text, "parentId": comment["snippet"]["parentId"]}}).execute()
     elif deletionMode == "heldForReview" or deletionMode == "rejected" or deletionMode == "published":
       try:
         response = auth.YOUTUBE.comments().setModerationStatus(id=commentIDs, moderationStatus=deletionMode, banAuthor=banChoice).execute()
