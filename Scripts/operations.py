@@ -1082,8 +1082,6 @@ If you still don't want to see bait comments anymore, you can just report it as 
             if "Please ignore the reply above, it is bait and the user wants to get replied for attention." in item.snippet.textOriginal:
               continue
           auth.YOUTUBE.comments().insert(part="snippet", body={"snippet": {"textOriginal": text, "parentId": comment.parentId}}).execute()
-        else:
-          auth.YOUTUBE.comments().insert(part="snippet", body={"snippet": {"textOriginal": text, "parentId": commentID}}).execute()
     elif deletionMode == "heldForReview" or deletionMode == "rejected" or deletionMode == "published":
       try:
         response = auth.YOUTUBE.comments().setModerationStatus(id=commentIDs, moderationStatus=deletionMode, banAuthor=banChoice).execute()
