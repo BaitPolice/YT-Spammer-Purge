@@ -1606,7 +1606,7 @@ def main():
     if returnToMenu == False:
       if proceedWithDeletion == True:
         operations.delete_found_comments(list(combinedCommentDict), banChoice, deletionMode)
-        if deletionMode != "reportSpam":
+        if deletionMode not in ("reportSpam", "warn"):
           if config['check_deletion_success'] == True:
             operations.check_deleted_comments(list(combinedCommentDict))
           elif config['check_deletion_success'] == False:
